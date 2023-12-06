@@ -4,12 +4,12 @@ Created by [T1nk-R](https://github.com/gusztavj/).
 
 Version 1.0 @ 2023-12-06
 
-New versions, support, feature requests, saying Hi: https://github.com/gusztavj/Modifier-Manager
+New versions, support, feature requests, saying Hi: [https://github.com/gusztavj/Modifier-Manager](https://github.com/gusztavj/Modifier-Manager)
 
 ## Copyright
 
 Creative Commons CC-BY-SA. Simply to put, you can create derivative works based on this script, and if you are nice, you don't remove the following attribution:
-> Original script created by: T1nk-R - na.mondhatod@gmail.com
+> Original script created by: T1nk-R - [na.mondhatod@gmail.com](mailto:na.mondhatod@gmail.com)
 
 ## Disclaimer
 
@@ -32,7 +32,7 @@ Presets help you be quick.
 
 While you can use the add-on to your will, the idea came when I wanted to create various LOD levels of my asset only by adding modifiers to objects. Having a lot of objects and lod levels, it became a bit awkward to select objects and select which modifiers to show when I wanted to see how the object looks at lod1 or lod2, for example.
 
-The idea was to include a tag like [lod0], [lod1] and so on at the end of modifier names. The following shows an example of a modifier that I want to apply only when I want to see or export the LOD2 version of my asset:
+The idea was to include a tag like \[lod0\], \[lod1\] and so on at the end of modifier names. The following shows an example of a modifier that I want to apply only when I want to see or export the LOD2 version of my asset:
 
 ![A modifier with a tag in the name](art/modifier-tagged.png)
 

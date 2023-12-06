@@ -21,7 +21,7 @@ bl_info = {
     "location": "Object menu",
     "description": "Turn on or off visibility of modifiers matching a name pattern",
     "category": "Object",
-    "doc_url": "Yet to come, till that just drop a mail to Gus at na.mondhatod@gmail.com",
+    "doc_url": "https://github.com/gusztavj/Modifier-Manager",
 }
 
 if "bpy" in locals():
