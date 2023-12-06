@@ -42,7 +42,7 @@ def menuItem(self, context):
 # Class registry
 classes = [
     modifierManager.T1nkerModifierManagerAddonSettings, 
-    modifierManager.T1nkerModifierManagerAddonPreferences, 
+    modifierManager.T1nkerModifierManagerPanel,
     modifierManager.T1NKER_OT_ModifierManager
 ]
 
@@ -55,6 +55,8 @@ def register():
     # Register classes
     for c in classes:
         bpy.utils.register_class(c)        
+    
+    bpy.types.Scene.t1nkrMaterialManagerSettings = bpy.props.PointerProperty(type=modifierManager.T1nkerModifierManagerAddonSettings)
     
     # Add menu command to 3D View / Object (visible in Object mode)
     bpy.types.TOPBAR_MT_edit.append(menuItem)    
@@ -73,23 +75,38 @@ def register():
 
 # Unregister the plugin
 def unregister():
-
-    # Put in try since we perform this as a preliminary cleanup of leftover stuff during registration    
-    try:
-        # Unregister key mapping
-        for km, kmi in addon_keymaps:
+    
+    # Unregister key mapping
+    for km, kmi in addon_keymaps:
+        try:
             km.keymap_items.remove(kmi)
-        addon_keymaps.clear()
-
-        # Unregister classes (in reverse order)
-        for c in reversed(classes):
-            bpy.utils.unregister_class(c)
+        except:
+            # Don't panic, it was not added either
+            pass
         
-        # Delete menu item
-        bpy.types.TOPBAR_MT_edit.remove(menuItem)
+    addon_keymaps.clear()
+    
+    try:
+        del bpy.types.Scene.t1nkrMaterialManagerSettings
     except:
+        # Don't panic, it was not added either
+            pass
+
+    # Unregister classes (in reverse order)
+    for c in reversed(classes):
+        try:
+            bpy.utils.unregister_class(c)
+        except:
+            # Don't panic, it was not registered at all
+            pass
+    
+    try:
+        # Delete menu item
+        bpy.types.TOPBAR_MT_edit.remove(menuItem)        
+    except:
+        # Don't panic, it was not added at all
         pass
 
-# Let you run registration without installing. You'll find the command in Edit menu
+# Let you run registration without installing. You'll find the command in the Edit menu.
 if __name__ == "__main__":
     register()
