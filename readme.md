@@ -9,7 +9,7 @@ New versions, support, feature requests, saying Hi: [https://github.com/gusztavj
 ## Copyright
 
 Creative Commons CC-BY-SA. Simply to put, you can create derivative works based on this script, and if you are nice, you don't remove the following attribution:
-> Original script created by: T1nk-R - [na.mondhatod@gmail.com](mailto:na.mondhatod@gmail.com)
+> Original version created by: T1nk-R - [na.mondhatod@gmail.com](mailto:na.mondhatod@gmail.com)
 
 ## Disclaimer
 
