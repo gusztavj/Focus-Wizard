@@ -1,24 +1,30 @@
 # Modifier Manager
+# - part of T1nk-R Utilities for Blender
 #
 # COPYRIGHT **************************************************************************************************
 # Creative Commons CC-BY-SA. Simply to put, you can create derivative works based on this script,
 # and if you are nice, you don't remove the following attribution:
 #
-# Original script created by: T1nk-R - na.mondhatod@gmail.com
-# Version 2021-05-15
+#       Original addon created by: T1nk-R - na.mondhatod@gmail.com
+#
+# Version 1.0.2 @ 2023-12-07
 #
 # DISCLAIMER *************************************************************************************************
 # This script is provided as-is. Use at your own risk. No warranties, no guarantee, no liability,
 # no matter what happens. Still I tried to make sure no weird things happen.
 #
+# USAGE ******************************************************************************************************
+# You can use this add-on to add, edit and remove custom object properties in batches.
 # 
+# New versions, support, feature requests, saying Hi: [https://github.com/gusztavj/Modifier-Manager](https://github.com/gusztavj/Modifier-Manager)
+#
 
 bl_info = {
     "name": "T1nk-R Modifier Manager",
-    "author": "GusJ",
-    "version": (1, 0),
-    "blender": (2, 91, 0),
-    "location": "Object menu",
+    "author": "T1nk-R (GusJ)",
+    "version": (1, 0, 2),
+    "blender": (3, 3, 0),
+    "location": "View3D > Sidebar (N) > T1nk-R Utils",
     "description": "Turn on or off visibility of modifiers matching a name pattern",
     "category": "Object",
     "doc_url": "https://github.com/gusztavj/Modifier-Manager",

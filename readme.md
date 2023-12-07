@@ -2,7 +2,7 @@
 
 Created by [T1nk-R](https://github.com/gusztavj/).
 
-Version 1.0 @ 2023-12-06
+Version 1.0.2 @ 2023-12-07
 
 New versions, support, feature requests, saying Hi: [https://github.com/gusztavj/Modifier-Manager](https://github.com/gusztavj/Modifier-Manager)
 

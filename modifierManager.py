@@ -101,7 +101,7 @@ class T1nkerModifierManagerAddonSettings(bpy.types.PropertyGroup):
     
     # Defines a pattern. Modifiers with a name matching this pattern will be made visible in the viewport.
     showThese: StringProperty(
-        name="Show these:",
+        name="Show these",
         description="You can use a regex applied on modifier names to specify which to show"
     )
     """
@@ -110,7 +110,7 @@ class T1nkerModifierManagerAddonSettings(bpy.types.PropertyGroup):
     
     # Defines a pattern. Modifiers with a name matching this pattern will be made hidden in the viewport.
     hideThese: StringProperty(
-        name="Hide these:",
+        name="Hide these",
         description="You can use a regex applied on modifier names to specify which to hide"
     )    
     """
@@ -143,11 +143,11 @@ class T1nkerModifierManagerPanel(bpy.types.Panel):
     """
     # Blender-specific stuff
     bl_idname = "OBJECT_PT_t1nker_modifiermanager_panel"
-    bl_label = "Modifier Visibility (T1nk-R Modifier Manager)"    
+    bl_label = "Modifier Visibility Manager (T1nk-R Modifier Manager)"    
     bl_description = "Switch visibility of modifiers based on name pattern"
     bl_space_type = "VIEW_3D"
     bl_region_type = "UI"
-    bl_category = "T1nk-R"  # this is going to be the name of the tab
+    bl_category = "T1nk-R Utils"  # this is going to be the name of the tab
     
     # Draw the panel  =============================================================================================================  
     def draw(self, context: Context):
