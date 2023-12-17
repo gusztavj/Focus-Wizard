@@ -20,7 +20,7 @@
 #
 
 bl_info = {
-    "name": "T1nk-R Modifier Manager",
+    "name": "T1nk-R Modifier Visibility Manager",
     "author": "T1nk-R (GusJ)",
     "version": (1, 0, 2),
     "blender": (3, 3, 0),

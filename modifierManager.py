@@ -143,8 +143,8 @@ class T1nkerModifierManagerPanel(bpy.types.Panel):
     """
     # Blender-specific stuff
     bl_idname = "OBJECT_PT_t1nker_modifiermanager_panel"
-    bl_label = "Modifier Visibility Manager (T1nk-R Modifier Manager)"    
-    bl_description = "Switch visibility of modifiers based on name pattern"
+    bl_label = "Modifier Visibility for LODs (T1nk-R Utilities)"    
+    bl_description = "Switch visibility of modifiers based on modifier name pattern"
     bl_space_type = "VIEW_3D"
     bl_region_type = "UI"
     bl_category = "T1nk-R Utils"  # this is going to be the name of the tab
