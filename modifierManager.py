@@ -63,12 +63,12 @@ class T1nkerModifierManagerAddonSettings(bpy.types.PropertyGroup):
         """
 
         # Check if Custom is selected and do nothing if it is
-        if context.scene.t1nkrMaterialManagerSettings.presetLodLevel == "custom": 
+        if context.scene.t1nkrModifierManagerSettings.presetLodLevel == "custom": 
             return None
         
         # Set the predefined patterns
-        context.scene.t1nkrMaterialManagerSettings.showThese = self.presetPatterns[context.scene.t1nkrMaterialManagerSettings.presetLodLevel]["show"]
-        context.scene.t1nkrMaterialManagerSettings.hideThese = self.presetPatterns[context.scene.t1nkrMaterialManagerSettings.presetLodLevel]["hide"]
+        context.scene.t1nkrModifierManagerSettings.showThese = self.presetPatterns[context.scene.t1nkrModifierManagerSettings.presetLodLevel]["show"]
+        context.scene.t1nkrModifierManagerSettings.hideThese = self.presetPatterns[context.scene.t1nkrModifierManagerSettings.presetLodLevel]["hide"]
         
         # Item changed, execute operation
         bpy.ops.t1nker.modifiermanager()
@@ -158,7 +158,7 @@ class T1nkerModifierManagerPanel(bpy.types.Panel):
         """
         
         # Store the settings in a shorthand variable
-        self.settings = context.scene.t1nkrMaterialManagerSettings
+        self.settings = context.scene.t1nkrModifierManagerSettings
         
         # We'll create boxes with rows for the various settings
         
@@ -255,7 +255,7 @@ class T1NKER_OT_ModifierManager(Operator):
     def invoke(self, context, event):           
         """Show the panel if it can be shown.
         """
-             
+        
         # For first run in the session, load addon defaults (otherwise use values set previously in the session)
         if self.settings is None:
             self.settings = context.preferences.addons[__package__].preferences.settings
@@ -283,7 +283,7 @@ class T1NKER_OT_ModifierManager(Operator):
             print(f"Modifier visibility changing process started")
             
             # Get relevant stuff to shortcut variables
-            self.settings = context.scene.t1nkrMaterialManagerSettings            
+            self.settings = context.scene.t1nkrModifierManagerSettings            
             viewLayer = context.view_layer            
             activeObject = viewLayer.objects.active
                         

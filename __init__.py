@@ -62,12 +62,8 @@ def register():
     for c in classes:
         bpy.utils.register_class(c)        
     
-    bpy.types.Scene.t1nkrMaterialManagerSettings = bpy.props.PointerProperty(type=modifierManager.T1nkerModifierManagerAddonSettings)
+    bpy.types.Scene.t1nkrModifierManagerSettings = bpy.props.PointerProperty(type=modifierManager.T1nkerModifierManagerAddonSettings)
     
-    # Add menu command to 3D View / Object (visible in Object mode)
-    bpy.types.TOPBAR_MT_edit.append(menuItem)    
-
-
     # Set CTRL+SHIFT+Y as shortcut
     wm = bpy.context.window_manager
     # Note that in background mode (no GUI available), keyconfigs are not available either,
@@ -93,7 +89,7 @@ def unregister():
     addon_keymaps.clear()
     
     try:
-        del bpy.types.Scene.t1nkrMaterialManagerSettings
+        del bpy.types.Scene.t1nkrModifierManagerSettings
     except:
         # Don't panic, it was not added either
             pass
