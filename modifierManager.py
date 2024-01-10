@@ -258,7 +258,11 @@ class T1NKER_OT_ModifierManager(Operator):
         
         # For first run in the session, load addon defaults (otherwise use values set previously in the session)
         if self.settings is None:
-            self.settings = context.preferences.addons[__package__].preferences.settings
+            try:
+                #self.settings = context.preferences.addons[__package__].preferences.settings
+                self.settings = context.scene.t1nkrModifierManagerSettings
+            except:
+                pass
 
         # Show dialog
         result = context.window_manager.invoke_props_dialog(self, width=400)
@@ -268,7 +272,8 @@ class T1NKER_OT_ModifierManager(Operator):
             return {'CANCELLED'}
         
         if self.settings.presetLodLevel != "custom":
-            self.settings.hideThese = T1nkerModifierManagerAddonSettings.presetPatterns[self.settings.presetLodLevel]
+            self.settings.hideThese = T1nkerModifierManagerAddonSettings.presetPatterns[self.settings.presetLodLevel]["hide"]
+            self.settings.showThese = T1nkerModifierManagerAddonSettings.presetPatterns[self.settings.presetLodLevel]["show"]
         
         return result
 
@@ -277,15 +282,16 @@ class T1NKER_OT_ModifierManager(Operator):
     def execute(self, context):      
         """Execute the operator
         """                     
+        
+        print(f"Modifier visibility changing process started")
+            
+        # Get relevant stuff to shortcut variables
+        self.settings = context.scene.t1nkrModifierManagerSettings            
+        viewLayer = context.view_layer            
+        activeObject = viewLayer.objects.active
 
         # Big try block to make sure we terminate gracefully
-        try:
-            print(f"Modifier visibility changing process started")
-            
-            # Get relevant stuff to shortcut variables
-            self.settings = context.scene.t1nkrModifierManagerSettings            
-            viewLayer = context.view_layer            
-            activeObject = viewLayer.objects.active
+        try:            
                         
             # Determine scope and collect objects
             if self.settings.affectSelectedObjectsOnly:
@@ -363,6 +369,7 @@ class T1NKER_OT_ModifierManager(Operator):
         finally:
             # Restore active and selected flags
             viewLayer.objects.active = activeObject
+            
             print(f"Modifier visibility changing process exited")
 
         return {'FINISHED'}
