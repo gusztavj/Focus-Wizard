@@ -17,7 +17,7 @@
 # 
 # You need Blender 3.6 or newer for this addon to work.
 #
-# Help, support, updates and anything else: https://github.com/gusztavj/Custom-Object-Property-Manager
+# Help, support, updates and anything else: https://github.com/gusztavj/Modifier-Manager
 #
 # COPYRIGHT ***********************************************************************************************************************
 # Creative Commons CC BY-NC-SA:
@@ -42,10 +42,16 @@
 # DISCLAIMER **********************************************************************************************************************
 # This add-on is provided as-is. Use at your own risk. No warranties, no guarantee, no liability,
 # no matter what happens. Still I tried to make sure no weird things happen:
-#   * This add-on may add and delete custom object properties based on your instructions.
-#   * This add-on is not intended to modify your objects and other Blender assets in any other way.
+#   * This add-on is intended to show or hide objects under the collection you specified as the scope of operation.
+#   * This add-on is intended to show or hide modifier effects of objects under the collection you specified 
+#     as the scope of operation.
+#   * This add-on is not intended to modify your objects and other Blender assets in any other way. In particular, this add-on 
+#     is not intended to anyhow touch objects out of the scope you selected as the scope of operation.
+#   * You shall be able to simply undo consequences made by this add-on.
+#   * You can use this add-on to save your presets in JSON format to a file on your computer.
+#   * You can use this add-on to load presets from a JSON file on your computer.
 #
-# You may learn more about legal matters on page https://github.com/gusztavj/Custom-Object-Property-Manager
+# You may learn more about legal matters on page https://github.com/gusztavj/Modifier-Manager
 #
 # *********************************************************************************************************************************
 
@@ -58,11 +64,17 @@ from . import presetManager
 
 
     
-# Control panel to show in Blender's viewport, in the 'N' toolbar =================================================================
+# Control panel to show in Blender's viewport, in the 'N' toolbar #################################################################
 class T1nkerFocusWizardPanel(bpy.types.Panel):
-    """Control panel to show in Blender's viewport, in the 'N' toolbar
     """
-    # Blender-specific stuff
+    Control panel to show in Blender's viewport, in the 'N' toolbar. This class enables you to select operation scope and preset,
+    as well as accessing the Preset Manager implemented in presetManager.py
+    """
+    
+    # Properties ==================================================================================================================
+    
+    # Blender-specific stuff ------------------------------------------------------------------------------------------------------
+    
     bl_idname = "OBJECT_PT_t1nker_focuswizard_panel"
     bl_label = "T1nk-R Focus Wizard (T1nk-R Utilities)"    
     bl_description = "Change object and modifier visibility based on preset rules for LOD levels"
@@ -70,6 +82,9 @@ class T1nkerFocusWizardPanel(bpy.types.Panel):
     bl_region_type = "UI"
     bl_category = "T1nk-R Utils"  # this is going to be the name of the tab
     
+    # Public functions ============================================================================================================
+    
+    # Poll callback for accessibility ---------------------------------------------------------------------------------------------
     @classmethod 
     def poll(self, context):
         # Store the settings in a shorthand variable
@@ -80,7 +95,7 @@ class T1nkerFocusWizardPanel(bpy.types.Panel):
             
         return True
     
-    # Draw the panel  =============================================================================================================  
+    # Draw UI ---------------------------------------------------------------------------------------------------------------------  
     def draw(self, context: Context):
         """Draws the panel.
 
@@ -89,8 +104,7 @@ class T1nkerFocusWizardPanel(bpy.types.Panel):
         """
         
         # Store the settings in a shorthand variable
-        self.settings = context.scene.t1nkrFocusWizardSettings                
-                
+        self.settings = context.scene.t1nkrFocusWizardSettings                                
         layout = self.layout
         
         
@@ -108,15 +122,14 @@ class T1nkerFocusWizardPanel(bpy.types.Panel):
         row = box.row(align=True)
         row.prop_search(data=self.settings, property="rootCollection", search_data=bpy.data, search_property="collections")
         
-        
-        
+
         # Preset selector and info
         #
         
         box = layout.box()
         
         row = box.row(align=True)        
-        row.label(text="Select preset to hide modifiers")        
+        row.label(text="Choose, apply, view and edit presets")        
         
         row = box.row(align=True)
         row.prop(self.settings, "presetLodLevel")
@@ -126,11 +139,12 @@ class T1nkerFocusWizardPanel(bpy.types.Panel):
             # HACK: Until there's a better way of initializing the empty preset list, tell the user how they can do it
             row = box.row(align=True)
             row.label(text="Click [Edit] > Check [Confirm reverting...] > Click [Revert Built-in] to load built-in presets")    
-        
+
+        # Access Preset Manager        
         row = box.row(align=True)
         row.operator("t1nker.focuswizardpreseteditor", text="Add/Edit Presets", icon="PREFERENCES")
         
-        # Enable explicit execution (without the need to change preset)
+        # Apply current preset which happens automatically upon changing. You can use this button to force manual execution.
         #
         row.operator("t1nker.focuswizard", text="Refresh", icon="FILE_REFRESH")
         
@@ -182,23 +196,29 @@ class T1nkerFocusWizardPanel(bpy.types.Panel):
         
 
 
-# Main operator class to switch visibility of modifiers based on name pattern =====================================================
+# Business logic for showing/hiding objects and modifiers #########################################################################
 class T1NKER_OT_FocusWizard(Operator):    
-    """Switch visibility of objects based on modifier names, object names and custom object property values."""
+    """
+    This class contains the implementation of applying the selected preset.
+    """
     
-    # Blender-specific stuff
+    # Properties ==================================================================================================================
+    
+    # Blender-specific stuff ------------------------------------------------------------------------------------------------------    
     bl_idname = "t1nker.focuswizard"
     bl_label = "T1nk-R Focus Wizard"
     bl_options = {'REGISTER', 'UNDO'}    
     
-    # Operator settings
-    settings : presetManager.T1nkerFocusWizardSettings = None
-
-    # Constructor =================================================================================================================
+    # Other properties ------------------------------------------------------------------------------------------------------------
+        
+    # Lifecycle management ========================================================================================================    
     def __init__(self):
+        """
+        Creates `self.settings: presetManager.T1nkerFocusWizardSettings`, a shortcut for the add-on's settings.
+        """
         self.settings = None                
     
-    # See if the operation can run ================================================================================================
+    # Poll callback for accessibility ---------------------------------------------------------------------------------------------
     @classmethod
     def poll(cls, context):
         """Standard method requested by Blender to tell if the UI can be drawn.
@@ -214,9 +234,17 @@ class T1NKER_OT_FocusWizard(Operator):
         return True
     
 
-    # Show the dialog =============================================================================================================
+    # Draw UI ---------------------------------------------------------------------------------------------------------------------
     def invoke(self, context, event):           
-        """Show the panel if it can be shown.
+        """
+        Show the panel.
+        
+        Args:
+            context (bpy.types.Context): The bpy.context object passed by Blender.
+            event: An event passed by Blender. Not used by us.
+            
+        Returns:
+            Operator return set as requested by Blender (https://docs.blender.org/api/current/bpy.ops.html) to indicate success or failure.
         """
         
         # For first run in the session, load addon defaults (otherwise use values set previously in the session)
@@ -230,18 +258,25 @@ class T1NKER_OT_FocusWizard(Operator):
         result = context.window_manager.invoke_props_dialog(self, width=400)
                 
         if (self.settings.affectSelectedObjectsOnly and len(bpy.context.selected_objects) == 0):
-            raise Exception("You chose to process only selected objects, but no object is selected.")
+            self.report({'ERROR'}, "You chose to process only selected objects, but no object is selected.") 
             return {'CANCELLED'}
 
-        
         return result
-
     
     
-    # Here is the core stuff ======================================================================================================
+    # Execute the operator --------------------------------------------------------------------------------------------------------
     def execute(self, context):      
-        """Execute the operator
+        """
+        Perform the requested operation using the currently selected preset 
+        stored in context.scene.t1nkrFocusWizardSettings.selectedPreset.
+        
+        Args:
+            context (bpy.types.Context): The bpy.context object passed by Blender.
+            
+        Returns:
+            Operator return set as requested by Blender (https://docs.blender.org/api/current/bpy.ops.html) to indicate success or failure.
         """                     
+        
         print("")
         print("=" * 80)
         print(f"T1nk-R Focus Wizard Visibility Adjustment operation started")
@@ -249,10 +284,8 @@ class T1NKER_OT_FocusWizard(Operator):
             
         # Get relevant stuff to shortcut variables
         self.settings = context.scene.t1nkrFocusWizardSettings   
-        
         viewLayer = context.view_layer            
         activeObject = viewLayer.objects.active
-        
         root = self.settings.rootCollection
         preset = self.settings.selectedPreset
         
@@ -286,7 +319,7 @@ class T1NKER_OT_FocusWizard(Operator):
                 
             for obj in objects:
                 obj.hide_set(True, view_layer=viewLayer)
-                obj.hide_viewport = obj.hide_render = False
+                # obj.hide_viewport = obj.hide_render = False
             
             # Show objects by name
             if len(preset.objectsToShowByName) == 0:
@@ -299,7 +332,7 @@ class T1NKER_OT_FocusWizard(Operator):
                         
                     for obj in objects:                    
                         obj.hide_set(False, view_layer=viewLayer)
-                        obj.hide_viewport = obj.hide_render = False
+                        # obj.hide_viewport = obj.hide_render = False
             else:
                 if self.settings.isVerbose:
                     print(f"\tTrying to show objects matching name pattern: {preset.objectsToShowByName}")
@@ -312,7 +345,7 @@ class T1NKER_OT_FocusWizard(Operator):
                             print(f"\t\t'{obj.name}' WOULD be made visible by name-based showing pattern")
                         else:
                             obj.hide_set(False, view_layer=viewLayer)
-                            obj.hide_viewport = obj.hide_render = False
+                            # obj.hide_viewport = obj.hide_render = False
                             if self.settings.isVerbose:
                                 print(f"\t\t'{obj.name}' made visible by name-based showing pattern")
                     else:
@@ -337,7 +370,7 @@ class T1NKER_OT_FocusWizard(Operator):
                             print(f"\t\t'{obj.name}' WOULD be made hidden by name-based hiding pattern")
                         else:
                             obj.hide_set(True, view_layer=viewLayer)      
-                            obj.hide_viewport = obj.hide_render = True                      
+                            # obj.hide_viewport = obj.hide_render = True                      
                             if self.settings.isVerbose:
                                 print(f"\t\t'{obj.name}' made hidden by name-based hiding pattern")
                     else:
@@ -374,7 +407,7 @@ class T1NKER_OT_FocusWizard(Operator):
                                     print(f"\t\t'{obj.name}' WOULD be made visible by property-based showing pattern")
                                 else:
                                     obj.hide_set(False, view_layer=viewLayer)
-                                    obj.hide_viewport = obj.hide_render = False
+                                    # obj.hide_viewport = obj.hide_render = False
                                     if self.settings.isVerbose:
                                         print(f"\t\t'{obj.name}' made visible by property-based showing pattern")
                             else:
@@ -400,7 +433,7 @@ class T1NKER_OT_FocusWizard(Operator):
                                     print(f"\t\t'{obj.name}' WOULD be made hidden by property-based hiding pattern")
                                 else:
                                     obj.hide_set(True, view_layer=viewLayer)
-                                    obj.hide_viewport = obj.hide_render = True
+                                    # obj.hide_viewport = obj.hide_render = True
                                     if self.settings.isVerbose:
                                         print(f"\t\t'{obj.name}' made hidden by property-based hiding pattern")  
                             else:
@@ -481,11 +514,17 @@ class T1NKER_OT_FocusWizard(Operator):
                                 print(f"\t\t\tNo need to hide modifier {modifier.name}")
 
         except Exception as ex:
-            print(ex)
+            whatHappened1 = f"Whoaaa, nothing can be perfect, and an error occurred while applying the preset: {ex}."
+            whatHappened2 = f"Trying to revert original visibility of object and modifiers before canceling the operation"
+            print(whatHappened1)
+            print(whatHappened2)
+            self.report({'ERROR'}, f"{whatHappened1}\r\n{whatHappened2}")
             
             # Restore visibility state
             for obj in root.all_objects:
                 obj.hide_set(obj not in visibleObjects, view_layer=viewLayer)
+                
+            print("Visibility of objects restored.")
                 
         finally:
             # Restore active and selected flags

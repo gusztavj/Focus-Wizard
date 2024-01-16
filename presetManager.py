@@ -1,8 +1,59 @@
-"""
-presetManager.py, part of T1nk-R Focus Wizard add-on for Blender (3.6 and up)
-
-
-"""
+# T1nk-R's Focus Wizard add-on for Blender
+# - part of T1nk-R Utilities for Blender
+#
+# This module contains the implementation of the preset manager window and logic.
+#
+# Module and add-on authored by T1nk-R (https://github.com/gusztavj/)
+#
+# PURPOSE & USAGE *****************************************************************************************************************
+# You can use this add-on to create presets in the form of a set of rules:
+# 
+# * to control the visibility of Blender objects based on object name patterns and custom object property value patterns, 
+#   as well as
+# * to control the visibility of object modifiers based on modifier name patterns.
+# 
+# With this add-on you can set up rules to easily view your model as it looks like at various LOD levels by showing respective 
+# objects and modifier effects and hiding others.
+# 
+# You need Blender 3.6 or newer for this addon to work.
+#
+# Help, support, updates and anything else: https://github.com/gusztavj/Modifier-Manager
+#
+# COPYRIGHT ***********************************************************************************************************************
+# Creative Commons CC BY-NC-SA:
+#       This license enables re-users to distribute, remix, adapt, and build upon the material in any medium 
+#       or format for noncommercial purposes only, and only so long as attribution is given to the creator. 
+#       If you remix, adapt, or build upon the material, you must license the modified material under 
+#       identical terms. CC BY-NC-SA includes the following elements:
+#           BY: credit must be given to the creator.
+#           NC: Only noncommercial uses of the work are permitted.
+#           SA: Adaptations must be shared under the same terms.
+#
+#       Credit text:
+#           Original addon created by: T1nk-R - janvari.gusztav@imprestige.biz
+#
+#       For commercial use, please contact me via janvari.gusztav@imprestige.biz. Don't be scared of
+#       rigid contracts and high prices, above all I just want to know if this work is of your interest,
+#       and discuss options for commercial support and other services you may need.
+#
+#
+# Version: Please see the version tag under bl_info below.
+#
+# DISCLAIMER **********************************************************************************************************************
+# This add-on is provided as-is. Use at your own risk. No warranties, no guarantee, no liability,
+# no matter what happens. Still I tried to make sure no weird things happen:
+#   * This add-on is intended to show or hide objects under the collection you specified as the scope of operation.
+#   * This add-on is intended to show or hide modifier effects of objects under the collection you specified 
+#     as the scope of operation.
+#   * This add-on is not intended to modify your objects and other Blender assets in any other way. In particular, this add-on 
+#     is not intended to anyhow touch objects out of the scope you selected as the scope of operation.
+#   * You shall be able to simply undo consequences made by this add-on.
+#   * You can use this add-on to save your presets in JSON format to a file on your computer.
+#   * You can use this add-on to load presets from a JSON file on your computer.
+#
+# You may learn more about legal matters on page https://github.com/gusztavj/Modifier-Manager
+#
+# *********************************************************************************************************************************
 
 from typing import List, Set
 import bpy
@@ -217,7 +268,7 @@ class T1nkerFocusWizardSettings(bpy.types.PropertyGroup):
     """
     
     confirmRevert: BoolProperty(
-        name="Confirm reverting all built-in presets to factory settings",
+        name="Confirm resetting all built-in presets",
         description="Select to confirm your intent before clicking the button.",
         default=False
     )
@@ -226,7 +277,7 @@ class T1nkerFocusWizardSettings(bpy.types.PropertyGroup):
     """ 
     
     confirmReset: BoolProperty(
-        name="Confirm deleting all custom presets and resetting built-in presets",
+        name="Confirm deleting custom/resetting built-in presets",
         description="Select to confirm your intent before clicking the button.",
         default=False
     )
@@ -840,7 +891,7 @@ class T1NKER_OT_FocusWizardPresetEditor(Operator):
     bl_options = {'REGISTER', 'UNDO'}    
     
 
-    # Constructor =================================================================================================================
+    # Lifecycle management ========================================================================================================
     def __init__(self):
         """
         Just to create an instance-level variable
