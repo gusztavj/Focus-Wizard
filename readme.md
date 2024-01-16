@@ -1,32 +1,54 @@
-# Modifier Visibility Manager
+# T1nk-R Focus Wizard add on for Blender
 
-Created by [T1nk-R](https://github.com/gusztavj/).
+Part of **T1nk-R Utilities for Blender**
 
-Version 1.0.2 @ 2023-12-07
+## TL;DR
 
-New versions, support, feature requests, saying Hi: [https://github.com/gusztavj/Modifier-Manager](https://github.com/gusztavj/Modifier-Manager)
+You can use this add-on to create presets in the form of a set of rules:
 
-## Copyright
+* to control the visibility of Blender objects based on object name patterns and custom object property value patterns, as well as
+* to control the visibility of object modifiers based on modifier name patterns.
 
-Creative Commons CC-BY-SA. Simply to put, you can create derivative works based on this script, and if you are nice, you don't remove the following attribution:
-> Original version created by: T1nk-R - [na.mondhatod@gmail.com](mailto:na.mondhatod@gmail.com)
+With this add-on you can set up rules to easily view your model as it looks like at various LOD levels by showing respective objects and modifier effects and hiding others.
 
-## Disclaimer
+You need Blender 3.6 or newer for this addon to work.
 
-This script is provided as-is. Use at your own risk. No warranties, no guarantee, no liability, no matter what happens. Still I tried to make sure no weird things happen.
+Help, support, updates and anything else: [https://github.com/gusztavj/Custom-Object-Property-Manager](https://github.com/gusztavj/Custom-Object-Property-Manager)
 
-## What Is This?
+## Legal Stuff
 
-This add-on displays a Modifier Visibility panel in Blender allowing you to specify which modifiers to show or hide. Showing or hiding a modifier means showing or hiding its effect in the viewport.
+### Copyright
 
-You can tell whether you want the add-on to process all your Blender objects in your current scene's current view layer, or only the selected ones. This is called the _scope_.
+**Creative Commons CC BY-NC-SA:**
 
-You can specify a show and a hide regex pattern:
+* This license enables re-users to distribute, remix, adapt, and build upon the material in any medium or format for noncommercial purposes only, and only so long as attribution is given to the creator.
+* If you remix, adapt, or build upon the material, you must license the modified material under identical terms.
 
-* If the name of a modifier added to an object in the scope matches the _show_ pattern, it will be _shown_.
-* If the name of a modifier added to an object in the scope matches the _hide_ pattern, it will be made _hidden_.
+* CC BY-NC-SA includes the following elements:
 
-Presets help you be quick.
+  * BY: credit must be given to the creator.
+
+    Credit text:
+    > Original addon created by: T1nk-R - [janvari.gusztav@imprestige.biz](mailto:janvari.gusztav@imprestige.biz) / [https://github.com/gusztavj](https://github.com/gusztavj)
+
+  * NC: Only noncommercial uses of the work are permitted.
+  * SA: Adaptations must be shared under the same terms.
+
+**For commercial use**, please contact me via [janvari.gusztav@imprestige.biz](janvari.gusztav@imprestige.biz). Don't be scared of
+rigid contracts and high prices, above all I just want to know if this work is of your interest, and discuss options for commercial support and other services you may need.
+
+Version: Please see the `version` tag under `bl_info` in `__init__.py`.
+
+### Disclaimer
+
+This add-on is provided as-is. Use at your own risk. No warranties, no guarantee, no liability, no matter what happens. Still I tried to make sure no weird things happen:
+
+* This add-on may add and delete custom object properties based on your instructions.
+* This add-on is not intended to modify your objects and other Blender assets in any other way.
+
+You may learn more about legal matters on page [https://github.com/gusztavj/Custom-Object-Property-Manager](https://github.com/gusztavj/Custom-Object-Property-Manager)
+
+## Usage and Help
 
 ## Key Scenario
 

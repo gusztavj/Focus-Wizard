@@ -20,36 +20,47 @@
 #
 
 bl_info = {
-    "name": "T1nk-R Modifier Visibility Manager",
+    "name": "T1nk-R Focus Wizard",
     "author": "T1nk-R (GusJ)",
     "version": (1, 0, 2),
     "blender": (3, 3, 0),
     "location": "View3D > Sidebar (N) > T1nk-R Utils",
-    "description": "Turn on or off visibility of modifiers matching a name pattern",
+    "description": "Control visibility of objects and modifiers to see how your model looks at a specific LOD level",
     "category": "Object",
     "doc_url": "https://github.com/gusztavj/Modifier-Manager",
 }
 
 if "bpy" in locals():
     from importlib import reload
-    reload(modifierManager)
+    reload(presetManager)
+    reload(visibilityManager)    
     del reload
 
 import bpy
-from . import modifierManager
+from . import presetManager
+from . import visibilityManager
+
 
 # Store keymaps here to access after registration
 addon_keymaps = []
 
 # Define menu item
 def menuItem(self, context):
-    self.layout.operator(modifierManager.T1NKER_OT_ModifierManager.bl_idname)
+    self.layout.operator(visibilityManager.T1NKER_OT_FocusWizard.bl_idname)
 
 # Class registry
 classes = [
-    modifierManager.T1nkerModifierManagerAddonSettings, 
-    modifierManager.T1nkerModifierManagerPanel,
-    modifierManager.T1NKER_OT_ModifierManager
+    presetManager.T1nkerFocusWizardPreset,
+    presetManager.T1NKER_OT_FocusWizardPresetImportExport,
+    presetManager.T1NKER_OT_FocusWizardPresetEditor,
+    
+    presetManager.T1nkerFocusWizardPresetOperationParameters,
+    presetManager.T1NKER_OT_FocusWizardPresetOperations,
+    
+    presetManager.T1nkerFocusWizardSettings, 
+
+    visibilityManager.T1nkerFocusWizardPanel,    
+    visibilityManager.T1NKER_OT_FocusWizard
 ]
 
 # Register the plugin
@@ -62,7 +73,8 @@ def register():
     for c in classes:
         bpy.utils.register_class(c)        
     
-    bpy.types.Scene.t1nkrModifierManagerSettings = bpy.props.PointerProperty(type=modifierManager.T1nkerModifierManagerAddonSettings)
+    bpy.types.Scene.t1nkrFocusWizardOperationSettings = bpy.props.PointerProperty(type=presetManager.T1nkerFocusWizardPresetOperationParameters)
+    bpy.types.Scene.t1nkrFocusWizardSettings = bpy.props.PointerProperty(type=presetManager.T1nkerFocusWizardSettings)            
     
     # Set CTRL+SHIFT+Y as shortcut
     wm = bpy.context.window_manager
@@ -71,7 +83,7 @@ def register():
     kc = wm.keyconfigs.addon
     if kc:
         # km = wm.keyconfigs.addon.keymaps.new(name='Material Manager', space_type='EMPTY')
-        # kmi = km.keymap_items.new(ModifierManager.T1NKER_OT_RenameCollection.bl_idname, 'M', 'PRESS', ctrl=True, shift=True)
+        # kmi = km.keymap_items.new(FocusWizard.T1NKER_OT_RenameCollection.bl_idname, 'M', 'PRESS', ctrl=True, shift=True)
         # addon_keymaps.append((km, kmi))
         pass
 
@@ -89,10 +101,16 @@ def unregister():
     addon_keymaps.clear()
     
     try:
-        del bpy.types.Scene.t1nkrModifierManagerSettings
+        del bpy.types.Scene.t1nkrFocusWizardSettings
     except:
         # Don't panic, it was not added either
-            pass
+        pass
+        
+    try:
+        del bpy.types.Scene.t1nkrFocusWizardOperationSettings
+    except:
+        # Don't panic, it was not added either
+        pass
 
     # Unregister classes (in reverse order)
     for c in reversed(classes):
