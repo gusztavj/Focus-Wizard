@@ -59,6 +59,7 @@ from typing import List, Set
 import bpy
 import json
 import os.path
+import copy
 from bpy.props import StringProperty, BoolProperty, EnumProperty, CollectionProperty
 from bpy.types import Context, Panel, Operator, AddonPreferences, PropertyGroup, PointerProperty
 
@@ -347,7 +348,7 @@ class PresetDefinition:
     def __init__(
         self,
         builtIn: bool = True,
-        name: str = "", 
+        presetName: str = "", 
         oShow: str = "", 
         oHide: str = "", 
         pName: str = "", 
@@ -360,7 +361,7 @@ class PresetDefinition:
         Args:
             builtIn (bool, optional): Tells whether this preset is a built-in or custom one. The name of built-in presets cannot be changed. Built-in presets can be reverted to factory state. Defaults to True.
             
-            name (str, optional): The (unique) name of the preset. If the name is not unique, behavior is up to Blender. It may choose the first object with the same name, but don't take it as granted and don't rely on this assumptions. Defaults to "".
+            presetName (str, optional): The (unique) name of the preset. If the name is not unique, behavior is up to Blender. It may choose the first object with the same name, but don't take it as granted and don't rely on this assumptions. Defaults to "".
             
             oShow (str, optional): Objects within the scope and with a name matching this pattern will be made visible. An empty string means all objects in the scope will be made visible. Defaults to "".
             
@@ -379,7 +380,7 @@ class PresetDefinition:
         # Keep doc strings in one line as VS Code only displays one line of text for an argument
         
         self.builtIn = builtIn
-        self.name = name
+        self.presetName = presetName
         self.objectsToShowByName = oShow
         self.objectsToHideByName = oHide
         self.propertyName = pName
@@ -505,21 +506,22 @@ class T1NKER_OT_FocusWizardPresetOperations(Operator):
             
     presetDefinitions = [
         # Presets with direct reference to lod levels (modifier set for lod n shall not be visible for other lod levels)
-        # Expects lod levels be indicated in the form of /lodn/ or /lodn-m/
-        PresetDefinition(name = "Direct: Lod 0", oShow = "lod0",                    oHide = "lod[12345]",                        pName = "Hide at Lod Level",    pShow = "",     pHide = "0",        mShow = "",     mHide = "lod[12345]"),
-        PresetDefinition(name = "Direct: Lod 1", oShow = "lod.*1|lod0-",            oHide = "lod[02345]>|lod[234]-",             pName = "Hide at Lod Level",    pShow = "",     pHide = "[01]",     mShow = "",     mHide = "lod[02345]"),
-        PresetDefinition(name = "Direct: Lod 2", oShow = "lod.*2|lod[01]-[345]",    oHide = "lod[01345]>|lod.*-1|lod[34]-",      pName = "Hide at Lod Level",    pShow = "",     pHide = "[012]",    mShow = "",     mHide = "lod[01345]"),
-        PresetDefinition(name = "Direct: Lod 3", oShow = "lod.*3|lod[012]-[45]",    oHide = "lod[01245]>|lod.*-[012]|lod[4]-",   pName = "Hide at Lod Level",    pShow = "",     pHide = "[0123]",   mShow = "",     mHide = "lod[01245]"),
-        PresetDefinition(name = "Direct: Lod 4", oShow = "lod.*4|lod[0123]-5",      oHide = "lod[01235]>|lod.*-[0123]|lod[4]-",  pName = "Hide at Lod Level",    pShow = "",     pHide = "[01234]",  mShow = "",     mHide = "lod[01235]"),
-        PresetDefinition(name = "Direct: Lod 5", oShow = "lod.*5|lod[01234]-",      oHide = "lod[01234]>|lod.*-[01234]",         pName = "Hide at Lod Level",    pShow = "",     pHide = "[012345]", mShow = "",     mHide = "lod[01234]"),
+        # Expects lod levels be indicated in the form of #lodn or #lodn-m as trailing parts of names for objects, and #lodn for modifiers
+        PresetDefinition(presetName = "Direct: Lod 0", oShow = "#lod0",                   oHide = "#lod[12345]",                          pName = "Hide at Lod Level",    pShow = "",     pHide = "0",        mShow = "",     mHide = "#lod[12345]"),
+        PresetDefinition(presetName = "Direct: Lod 1", oShow = "#lod.*1|#lod0-",          oHide = "#lod[02345]$|#lod[234]-",              pName = "Hide at Lod Level",    pShow = "",     pHide = "[01]",     mShow = "",     mHide = "#lod[02345]$|#lod[234]-"),
+        PresetDefinition(presetName = "Direct: Lod 2", oShow = "#lod.*2|#lod[01]-[345]",  oHide = "#lod[01345]$|#lod.*-1|#lod[34]-",      pName = "Hide at Lod Level",    pShow = "",     pHide = "[012]",    mShow = "",     mHide = "#lod[01345]$|#lod.*-1|#lod[34]-"),
+        PresetDefinition(presetName = "Direct: Lod 3", oShow = "#lod.*3|#lod[012]-[45]",  oHide = "#lod[01245]$|#lod.*-[012]|#lod[4]-",   pName = "Hide at Lod Level",    pShow = "",     pHide = "[0123]",   mShow = "",     mHide = "#lod[01245]$|#lod.*-[012]|#lod[4]-"),
+        PresetDefinition(presetName = "Direct: Lod 4", oShow = "#lod.*4|#lod[0123]-5",    oHide = "#lod[01235]$|#lod.*-[0123]|#lod[4]-",  pName = "Hide at Lod Level",    pShow = "",     pHide = "[01234]",  mShow = "",     mHide = "#lod[01235]$|#lod.*-[0123]|#lod[4]-"),
+        PresetDefinition(presetName = "Direct: Lod 5", oShow = "#lod.*5|#lod[01234]-",    oHide = "#lod[01234]$|#lod.*-[01234]",          pName = "Hide at Lod Level",    pShow = "",     pHide = "[012345]", mShow = "",     mHide = "#lod[01234]$|#lod.*-[01234]"),
         
-        # Presets with incremental reference to lod levels (modifier set for lod n shall be visible for n and n+ levels)
-        PresetDefinition(name = "Incremental: Lod 0", oShow = "lod0",                     oHide = "lod[12345]>",                       pName = "Hide at Lod Level",    pShow = "",     pHide = "0",        mShow = "",  mHide = "lod[12345]"),
-        PresetDefinition(name = "Incremental: Lod 1", oShow = "lod.*1|lod0-",             oHide = "lod[02345]>|lod[234]-",             pName = "Hide at Lod Level",    pShow = "",     pHide = "[01]",     mShow = "",  mHide = "lod[2345]"),
-        PresetDefinition(name = "Incremental: Lod 2", oShow = "lod.*2|lod[01]-[2345]",    oHide = "lod[01345]>|lod.*-1|lod[34]-",      pName = "Hide at Lod Level",    pShow = "",     pHide = "[012]",    mShow = "",  mHide = "lod[345]"),
-        PresetDefinition(name = "Incremental: Lod 3", oShow = "lod.*3|lod[012]-[345]",    oHide = "lod[01245]>|lod.*-[012]|lod[4]-",   pName = "Hide at Lod Level",    pShow = "",     pHide = "[0123]",   mShow = "",  mHide = "lod[45]"),
-        PresetDefinition(name = "Incremental: Lod 4", oShow = "lod.*4|lod[0123]-[45]",    oHide = "lod[01235]>|lod.*-[0123]|lod[4]-",  pName = "Hide at Lod Level",    pShow = "",     pHide = "[01234]",  mShow = "",  mHide = "lod[5]"),
-        PresetDefinition(name = "Incremental: Lod 5", oShow = "lod.*5|lod[01234]-5",      oHide = "lod[01234]>|lod.*-[01234]",         pName = "Hide at Lod Level",    pShow = "",     pHide = "[012345]", mShow = "",  mHide = ""),
+        # Presets with cascaded reference to lod levels (modifier set for lod n shall be visible for n and n+ levels)
+        # Expects lod levels be indicated in the form of #lodn or #lodn-m as trailing parts of names for objects, and #lodn for modifiers
+        PresetDefinition(presetName = "Cascaded: Lod 0", oShow = "#lod0",                     oHide = "#lod[12345]$",                         pName = "Hide at Lod Level",    pShow = "",     pHide = "0",        mShow = "",  mHide = "#lod[12345]"),
+        PresetDefinition(presetName = "Cascaded: Lod 1", oShow = "#lod.*1|#lod0-",            oHide = "#lod[02345]$|#lod[234]-",              pName = "Hide at Lod Level",    pShow = "",     pHide = "[01]",     mShow = "",  mHide = "#lod[2345]"),
+        PresetDefinition(presetName = "Cascaded: Lod 2", oShow = "#lod.*2|#lod[01]-[2345]",   oHide = "#lod[01345]$|#lod.*-1|#lod[34]-",      pName = "Hide at Lod Level",    pShow = "",     pHide = "[012]",    mShow = "",  mHide = "#lod[345]"),
+        PresetDefinition(presetName = "Cascaded: Lod 3", oShow = "#lod.*3|#lod[012]-[345]",   oHide = "#lod[01245]$|#lod.*-[012]|#lod[4]-",   pName = "Hide at Lod Level",    pShow = "",     pHide = "[0123]",   mShow = "",  mHide = "#lod[45]"),
+        PresetDefinition(presetName = "Cascaded: Lod 4", oShow = "#lod.*4|#lod[0123]-[45]",   oHide = "#lod[01235]$|#lod.*-[0123]|#lod[4]-",  pName = "Hide at Lod Level",    pShow = "",     pHide = "[01234]",  mShow = "",  mHide = "#lod[5]"),
+        PresetDefinition(presetName = "Cascaded: Lod 5", oShow = "#lod.*5|#lod[01234]-5",     oHide = "#lod[01234]$|#lod.*-[01234]",          pName = "Hide at Lod Level",    pShow = "",     pHide = "[012345]", mShow = "",  mHide = ""),
     ]
     """
     Definitions of the built-in presets in the form of `PresetDefinition`.
@@ -590,8 +592,24 @@ class T1NKER_OT_FocusWizardPresetOperations(Operator):
         
         presets = context.scene.t1nkrFocusWizardSettings.presets
         
-        # Save custom presets
-        customPresets = [p for p in presets if p.builtIn == False]
+        # Save custom presets. Cloning with copy.copy() doesn't work, but we need a copy or presets.clear()
+        # a bit later deletes items 
+        customPresets = []
+        for customPreset in [preset for preset in presets if preset.builtIn == False]:
+            preset = PresetDefinition( 
+                builtIn = False,                
+                presetName = customPreset.presetName,
+                oShow = customPreset.objectsToShowByName,
+                oHide = customPreset.objectsToHideByName,
+                pName = customPreset.propertyName,
+                pShow = customPreset.propertyValueForShowing,
+                pHide = customPreset.propertyValueForHiding,
+                mShow = customPreset.modifiersToShow,
+                mHide = customPreset.modifiersToHide   
+            )
+            
+            customPresets.append(preset)
+        
         
         # Drop everything from the preset list
         presets.clear()                
@@ -600,7 +618,7 @@ class T1NKER_OT_FocusWizardPresetOperations(Operator):
         for presetDefinition in T1NKER_OT_FocusWizardPresetOperations.presetDefinitions:                    
             preset = presets.add()
             preset.builtIn = True
-            preset.presetName = presetDefinition.name
+            preset.presetName = presetDefinition.presetName
             preset.objectsToShowByName = presetDefinition.objectsToShowByName
             preset.objectsToHideByName = presetDefinition.objectsToHideByName
             preset.propertyName = presetDefinition.propertyName
@@ -656,7 +674,7 @@ class T1NKER_OT_FocusWizardPresetOperations(Operator):
         for presetDefinition in T1NKER_OT_FocusWizardPresetOperations.presetDefinitions:                    
             if presetToRevert.presetName == presetDefinition.presetName:
                 presetToRevert.builtIn = True
-                presetToRevert.presetName = presetDefinition.name
+                presetToRevert.presetName = presetDefinition.presetName
                 presetToRevert.objectsToShowByName = presetDefinition.objectsToShowByName
                 presetToRevert.objectsToHideByName = presetDefinition.objectsToHideByName
                 presetToRevert.propertyName = presetDefinition.propertyName
@@ -702,7 +720,7 @@ class T1NKER_OT_FocusWizardPresetOperations(Operator):
         for preset in presetsProperty:
             presetDef = PresetDefinition(
                 builtIn=preset.builtIn,
-                name=preset.presetName,
+                presetName=preset.presetName,
                 oShow=preset.objectsToShowByName,
                 oHide=preset.objectsToHideByName,
                 pName=preset.propertyName,
@@ -740,7 +758,7 @@ class T1NKER_OT_FocusWizardPresetOperations(Operator):
         # Drop items with no name (as the name is the key for the preset selector enum)
         for ix, importedPreset in enumerate(importedPresets):            
             # Check if there's a valid name set and ignore if there's not
-            if not "name" in importedPreset or len(str.strip(importedPreset["name"])) == 0:
+            if not "presetName" in importedPreset or len(str.strip(importedPreset["presetName"])) == 0:
                 self.report({'WARNING'}, f"Preset in object {ix} of the file has no valid name; skipping item.")
                 continue
         
@@ -749,13 +767,13 @@ class T1NKER_OT_FocusWizardPresetOperations(Operator):
             # Skip importing presets matching the name of an existing preset
             for preset in self.settings.presets:
                 for importedPreset in importedPresets:
-                    if "name" in importedPreset and importedPreset["name"] == preset.presetName:
+                    if "presetName" in importedPreset and importedPreset["presetName"] == preset.presetName:
                         importedPresets.remove(importedPreset)            
         else: # do not append but replace
             # Remove the preset with the same name if there's any
             for importedPreset in importedPresets:                        
                 for ix, preset in enumerate(self.settings.presets):
-                    if "name" in importedPreset and importedPreset["name"] == preset.presetName:
+                    if "presetName" in importedPreset and importedPreset["presetName"] == preset.presetName:
                         self.settings.presets.remove(ix)
                         break
         
@@ -763,7 +781,7 @@ class T1NKER_OT_FocusWizardPresetOperations(Operator):
         for ix, importedPreset in enumerate(importedPresets):
             preset = self.settings.presets.add()
             preset.builtIn                  = importedPreset["builtIn"]                 if "builtIn" in importedPreset                  else False
-            preset.presetName               = importedPreset["name"]                    # exists for sure, no-names has been already dropped
+            preset.presetName               = importedPreset["presetName"]              # exists for sure, no-names has been already dropped
             preset.objectsToShowByName      = importedPreset["objectsToShow"]           if "objectsToShow" in importedPreset            else ""
             preset.objectsToHideByName      = importedPreset["objectsToHide"]           if "objectsToHide" in importedPreset            else ""
             preset.propertyName             = importedPreset["propertyName"]            if "propertyName" in importedPreset             else ""

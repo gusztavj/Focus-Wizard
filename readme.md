@@ -237,7 +237,7 @@ Names of _Direct Tagging presets_ start with **Direct**, and includes 6 presets 
 
 These presets assume you organize your model elements and modifiers like this:
 
-* You add a tag `lodp` or `lodm-n` to the name of each of your objects, where:
+* You add a tag `#lodp` or `#lodm-n` to the end of the name of each of your objects, where:
   
   * `p` is a number between `0` and `5`,
 
@@ -247,41 +247,45 @@ These presets assume you organize your model elements and modifiers like this:
 
   * `m < n`.
   
-  * The tags may be, but are not required to be preceded by or enclosed in some kinds of symbols. For example you can add these tags like `#lod1` or `<lod2-4>`.
-
-    |![A screenshot of Blender's Outliner with object names tagged](art/organizing-model--tagging-objects-2.png)|
+    |![A screenshot of Blender's Outliner with object names tagged](art/organizing-model--tagging-objects-for-built-in-presets.png)|
     |:--:|
     |_Objects tagged_|
 
   * Objects without such a tag will never be displayed (enabling you to keep helper objects or templates together with your actual model elements).
     > Note: If you only want to tag objects requiring multiple versions for multiple levels of details, clear the `Show` rules. Then all objects will be made visible, and only those _not_ belonging to the selected lod level will be made hidden.
   
-  * For each lod level `p`, only objects tagged with `lodp` or `lodm-n` are made visible, where `m <= p` and `n >= p`. For example, if you want to show lod1 objects, and you have an object tagged as `#lod1` and another tagged as `<lod0-2>`, both will be visible.
+  * For each lod level `p`, only objects tagged with `#lodp` or `#lodm-n` are made visible, where `m <= p` and `n >= p`. For example, if you want to show lod1 objects, and you have an object tagged as `#lod1` and another tagged as `#lod0-2`, both will be visible.
 
 * You can add the [custom object property](#rules-based-on-custom-object-properties) (for example, using [T1nk-R Custom Object Property Manager](https://github.com/gusztavj/Custom-Object-Property-Manager), another member of the **T1nk-R Utilities**, designed to effectively manage custom object properties) named `Hide at Lod Level` to each of your objects which you want to hide on and below a specific LOD level, and assign the first level (a number between `0` to `5`) where the object is no more required. For example, if you want to hide an object at lod 3 (and lod 4 and lod 5), assign the value `3`.
   
   * For each lod level `p`, an object featuring the `Hide at Lod Level` property will be hidden if the value of the property is `q`, where `p <= q <= 5`. Objects not having this property or having other values will not be hidden.
 
-* You add a tag `lodn` to the name of modifiers which belong to a specific lod level.
+* You add a tag `#lodp` or `#lodm-n` to the end of the name of modifiers which belong to one or more specific lod level(s), where:
   
-  * If you select level `p`, modifiers tagged with `lodq`, where `q != p` will all be made hidden.
+  * `p` is a number between `0` and `5`,
+
+  * `m` is a number between `0` and `4` and
+  
+  * `n` is a number between `1` and `5` and
+
+  * `m < n`.
+  
+  * If you select level `p`, modifiers tagged with `#lodq`, where `q != p` will all be made hidden.
   
   * Modifiers without a lod tag will always be shown.
 
-  * Tags may be, but are not required to be preceded by or enclosed in some kinds of symbols. For example you can add these tags like `#lod1` or `<lod2>`.
-
 ##### Example for Modifier Visibility with Direct Tagging
 
-|![A screenshot of Blender's Properties editor with the Modifiers tab open to show tagged modifiers](art/organizing-model--tagging-modifiers.png)|
+|![A screenshot of Blender's Properties editor with the Modifiers tab open to show tagged modifiers](art/organizing-model--tagging-modifiers-for-built-in-presets.png)|
 |:--:|
 |_Modifiers tagged_|
 
-In the example above: 
+In the example above:
 
-* **Decimate [lod1]** will only be visible when you switch to lod 1
-* **Decimate [lod2]** will only be visible when you switch to lod 2
+* **Decimate #lod1** will only be visible when you switch to lod 1
+* **Decimate #lod2** will only be visible when you switch to lod 2
 * The **Array** modifier will always be visible as won't match any hiding rules, since it doesn't contain `lodp` where `p` is a number between 0 and 5.
-* If you switch to lod 3, and provided that the object is not completely hidden on lod 3, both **Decimate** operators will be hidden (as they will match the `lod[01245]` modifier hiding rule of the **Direct: Lod 3** preset you selected). Using direct tagging, you need to assign decimate or other geometry simplification modifiers for each lod level if you want to get a less detailed version of the object.
+* If you switch to lod 3, and provided that the object is not completely hidden on lod 3, both **Decimate** operators will be hidden (as they will match the `#lod[01245]$` branch of the `#lod[01245]$|#lod.*-[012]|#lod[4]-` modifier hiding rule of the **Direct: Lod 3** preset you selected). Using direct tagging, you need to assign decimate or other geometry simplification modifiers for each lod level if you want to get a less detailed version of the object.
 
 #### Presets for Cascaded Tagging  
 
@@ -289,7 +293,7 @@ Names of _Cascaded Tagging presets_ start with **Cascaded**, and includes 6 pres
 
 These presets assume you organize your model elements and modifiers like this:
 
-* (Same as with [Direct Tagging](#presets-for-direct-tagging)) You add a tag `lodp` or `lodm-n` to the name of each of your objects, where:
+* (Same as with [Direct Tagging](#presets-for-direct-tagging)) You add a tag `#lodp` or `#lodm-n` to the end of the name of each of your objects, where:
   
   * `p` is a number between `0` and `5`,
 
@@ -299,8 +303,6 @@ These presets assume you organize your model elements and modifiers like this:
   
   * `m < n`.
   
-  * The tags may be, but are not required to be preceded by or enclosed in some kinds of symbols. For example you can add these tags like `#lod1` or `<lod2-4>`.
-
     |![A screenshot of Blender's Outliner with object names tagged](art/organizing-model--tagging-objects-2.png)|
     |:--:|
     |_Objects tagged_|
@@ -308,13 +310,21 @@ These presets assume you organize your model elements and modifiers like this:
   * Objects without such a tag will never be displayed (enabling you to keep helper objects or templates together with your actual model elements).
     > Note: If you only want to tag objects requiring multiple versions for multiple levels of details, clear the `Show` rules. Then all objects will be made visible, and only those _not_ belonging to the selected lod level will be made hidden.
   
-  * For each lod level `p`, only objects tagged with `lodp` or `lodm-n` are made visible, where `m <= p` and `n >= p`. For example, if you want to show lod1 objects, and you have an object tagged as `#lod1` and another tagged as `<lod0-2>`, both will be visible.
+  * For each lod level `p`, only objects tagged with `#lodp` or `#lodm-n` are made visible, where `m <= p` and `n >= p`. For example, if you want to show lod1 objects, and you have an object tagged as `#lod1` and another tagged as `#lod0-2`, both will be visible.
 
 * (Same as with [Direct Tagging](#presets-for-direct-tagging)) You can add the [custom object property](#rules-based-on-custom-object-properties) (for example, using [T1nk-R Custom Object Property Manager](https://github.com/gusztavj/Custom-Object-Property-Manager), another member of the **T1nk-R Utilities**, designed to effectively manage custom object properties) named `Hide at Lod Level` to each of your objects which you want to hide on and below a specific LOD level, and assign the first level (a number between `0` to `5`) where the object is no more required. For example, if you want to hide an object at lod 3 (and lod 4 and lod 5), assign the value `3`.
   
   * For each lod level `p`, an object featuring the `Hide at Lod Level` property will be hidden if the value of the property is `q`, where `p <= q <= 5`. Objects not having this property or having other values will not be hidden.
 
-* You add a tag `lodn` to the name of modifiers which belong to a specific lod level _and less detailed levels_.
+* You add a tag `#lodp` or `#lodm-n` to the end of the name of modifiers which belong to one or more specific lod level(s)  _and less detailed levels_, where:
+  
+  * `p` is a number between `0` and `5`,
+
+  * `m` is a number between `0` and `4` and
+  
+  * `n` is a number between `1` and `5` and
+
+  * `m < n`.
   
   * If you select level `p`, modifiers tagged with `lodq`, where `q >= p` will all be made hidden, while modifiers tagged with `lodz`, where `z < p` will all be made visible.
 
@@ -322,20 +332,18 @@ These presets assume you organize your model elements and modifiers like this:
   
   * Modifiers without a lod tag will always be shown.
 
-  * Tags may be, but are not required to be preceded by or enclosed in some kinds of symbols. For example you can add these tags like `#lod1` or `<lod2>`.
-
 ##### Example for Modifier Visibility with Cascaded Tagging
 
-|![A screenshot of Blender's Properties editor with the Modifiers tab open to show tagged modifiers](art/organizing-model--tagging-modifiers.png)|
+|![A screenshot of Blender's Properties editor with the Modifiers tab open to show tagged modifiers](art/organizing-model--tagging-modifiers-for-built-in-presets.png)|
 |:--:|
 |_Modifiers tagged_|
 
-In the example above: 
+In the example above:
 
-* **Decimate [lod1]** will be visible when you switch to lod `p` where `p >= 1`.
-* **Decimate [lod2]** will be visible when you switch to lod `p` where `p >= 2`.
+* **Decimate #lod1** will be visible when you switch to lod `p` where `p >= 1`.
+* **Decimate #lod2** will be visible when you switch to lod `p` where `p >= 2`.
 * The **Array** modifier will always be visible as it won't match any hiding rules, since it doesn't contain `lodp` where `p` is a number between 0 and 5.
-* If you switch to lod 3, and provided that the object is not completely hidden on lod 3, both **Decimate** operators will apply (the key difference with the direct approact), as they will _not_ match the `lod[45]` modifier hiding rule of the **Cascaded: Lod 3** preset you selected. Using cascaded tagging, you _don't_ need to assign decimate or other geometry simplification modifiers for each lod level if you don't want to further reduce geometry.
+* If you switch to lod 3, and provided that the object is not completely hidden on lod 3, both **Decimate** operators will apply (the key difference with the direct approach), as they will _not_ match the `#lod[45]` modifier hiding rule of the **Cascaded: Lod 3** preset you selected. Using cascaded tagging, you _don't_ need to assign decimate or other geometry simplification modifiers for each lod level if you don't want to further reduce geometry.
 
 #### Choosing Between Built-In Presets
 
