@@ -135,7 +135,7 @@ A preset is a set of rules and some accompanying properties:
 
 * **Objects by property value** group of rules can be used to determine object visibility based on custom object property values:
   
-  * **Custom Property Name**. The name of a custom object property. If you define a pattern for **Show Objects by Property Value** or **Hide Objects by Property Value**, the add-on will check the value of the property you specified here.
+  * **Custom Property Name**. The name of a [custom object property](#rules-based-on-custom-object-properties). If you define a pattern for **Show Objects by Property Value** or **Hide Objects by Property Value**, the add-on will check the value of the property you specified here.
   
   * **Show Objects by Property Value**. A regex pattern. Objects to which the specified custom object property has been added with a value matching this regex will be made **visible**.
     * If the regex is empty, this rule won't have any effect.
@@ -145,23 +145,23 @@ A preset is a set of rules and some accompanying properties:
 
 * **Modifiers** group of rules can be used to determine modifier visibility based on modifier names:
   
-  * **Modifiers to Show.** A regex pattern. Only objects made visible by the **Objects by name** or **Objects by property value** group of rules rules will be considered. If the name of a modifier matches this regex, that modifier will be made **visible** in the viewport.
+  * **Modifiers to Show.** A regex pattern. Only objects made visible by the **Objects by name** or **Objects by property value** group of rules will be considered. If the name of a modifier matches this regex, that modifier will be made **visible** in the viewport.
     * If the regex is empty, this rule won't have any effect.
   
-  * **Modifiers to Hide.** A regex pattern. Only objects made visible by the **Objects by name** or **Objects by property value** group of rules rules will be considered. If the name of a modifier matches this regex, that modifier will be made **hidden** in the viewport.
+  * **Modifiers to Hide.** A regex pattern. Only objects made visible by the **Objects by name** or **Objects by property value** group of rules will be considered. If the name of a modifier matches this regex, that modifier will be made **hidden** in the viewport.
     * If the regex is empty, this rule won't have any effect.
 
 ### Rules based on custom object properties
 
 You can control object visibility based on custom object properties. This enables you to follow a scenario where you add a specific custom object property to objects that you want to hide or display at certain LOD levels.
 
-You easily add and manage custom object properties using [T1nk-R Custom Object Property Manager](https://github.com/gusztavj/Custom-Object-Property-Manager), another member of the **T1nk-R Utilities** designed specifically for this purpose.
+You can easily add and manage custom object properties using [T1nk-R Custom Object Property Manager](https://github.com/gusztavj/Custom-Object-Property-Manager), another member of the **T1nk-R Utilities**, designed specifically for this purpose.
 
 To locate custom object properties after selecting an object in Blender:
 
 1. Find or open a **Properties** editor.
 1. Click **Object**.
-1. Scroll down to and expand `Custom properties`.
+1. Scroll down to and expand **Custom properties**.
 
 |![Guided screenshot of how to locate custom object properties](art/custom-object-property-view.png)|
 |:--:|
@@ -169,28 +169,28 @@ To locate custom object properties after selecting an object in Blender:
 
 You can use any name allowed by Blender for you custom object properties.
 
-The simplest way is to create a string property named, for example, `Hide at Lod Level`, and set it to `n` (where `n` is a number) for an object if you don't need that object at lod level `n` and less-detailed levels. If you don't need to show the object from lod 3, enter `3`. This is how the built-in presets work. You can develop completely different scenarios and approaches than those discussed here. As long as you can tell to regex what you want, it's fine.
+The simplest way is to create a string property named, for example, `Hide at Lod Level`, and set it to `n` (where `n` is a number) for an object if you don't need that object at lod level `n` and less-detailed levels. If you don't need to show the object from lod 3, enter `3`. This is how the built-in presets work. You can develop completely different scenarios and approaches than those discussed here. As long as you can tell in regex language what you want, it's fine.
 
 ### Evaluation Order
 
-Conditions for a preset are evaluated in the following order and accompanying actions are performed in the following order:
+Rules in a preset are evaluated in the following order and accompanying actions are performed in the following order:
 
 1. The [scope](#scope-selector) is determined.
 1. All objects are made hidden.
-1. The **Show Objects by Name** rule is processed. 
+1. The **Show Objects by Name** rule is processed:
    1. If the rule is empty, all objects (in the scope) are made visible.
    1. Otherwise objects matching the rule are made visible.
-1. The **Hide Objects by Name** rule is processed.
+1. The **Hide Objects by Name** rule is processed:
    1. If the rule is empty, no objects are made hidden.
    1. Otherwise objects matching the rule are made hidden.
-1. The **Show Objects by Property Value** rule is processed.
+1. The **Show Objects by Property Value** rule is processed:
    1. If the rule is empty, it's skipped.
    1. Otherwise objects matching the rule are made visible.
-1. The **Hide Objects by Property Value** rule is processed.
+1. The **Hide Objects by Property Value** rule is processed:
    1. If the rule is empty, it's skipped.
    1. Otherwise objects matching the rule are made hidden.
-1. All modifiers of all still visible objects are made hidden (in the viewport and within the scope).
-1. The **Modifiers to Show** rule is processed.
+1. All modifiers of all still visible objects (within the scope) are made hidden (in the viewport).
+1. The **Modifiers to Show** rule is processed:
    1. If the rule is empty, all modifiers of all visible objects (in the scope) are made visible.
    1. Otherwise modifiers of visible objects in the scope with a matching name are made visible.
 1. The **Modifiers to Hide** rule is processed.
@@ -201,7 +201,7 @@ Notes:
 
 * If you hide an object by name, you can make it visible by custom property value.
 * You only need to specify a regex if you want to control something. If you, for example, don't use custom object properties for this purpose, you don't need to define rules for them.
-* Visibility of modifiers of objects made hidden initially or by any of the rules are is affected.
+* Visibility of modifiers of objects made hidden initially or by any of the rules is not affected.
 
 ### Tagging Objects and Modifiers
 
@@ -215,7 +215,7 @@ Objects with tags may look like this:
 |:--:|
 |_Objects with name tagged_|
 
-In the screenshot above, objects are tagged and tags are enclosed in angle brackets. While the **Parapet Top \<lod0>** object is only used for lod 0, the object named **Pillars \<lod0-5>** is going to be used at each level (as it's geometry cannot be simplified further without loosing important details).
+In the screenshot above, objects are tagged and tags are enclosed in angle brackets. While the **Parapet Top \<lod0>** object is intended to be only used for lod 0, the object named **Pillars \<lod0-5>** is going to be used on each level (as it's geometry cannot be simplified further without loosing substantial details).
 
 Modifiers with tags look like this:
 
@@ -225,11 +225,9 @@ Modifiers with tags look like this:
 
 As you can see, there are two Decimate modifiers, one for lod 1 and another for lod 2, while the Array modifier is not tagged, indicating that it shall be used (that is, stay visible) on all lod levels.
 
-Note that it may not be practical to use `[` and `]` for tagging (such as in `[lod1]`) if you plan to rely on them in rules, since you need to write regular expressions, and therefore you always need to double-escape these characters if you want to incorporate them in your regular expressions, such as in `\\[lod]`, making them less easy to read. Use `#` or `<` and `>` instead, for example.
+Note that it may not be practical to use `[` and `]` for tagging (such as in `[lod1]`) if you plan to rely on them in rules, since you need to write regular expressions, and therefore you always need to double-escape these characters if you want to incorporate them in your regular expressions, such as in `\\[lod[012]\\]`, making them less easy to read. Use `#` or `<` and `>` instead, for example.
 
 ### Built-In Presets
-
-Built-in presets are provided for a few scenarios:
 
 This add-on is shipped with two sets of presets, called the [Direct presets](#presets-for-direct-tagging) and the [Cascaded presets](#presets-for-cascaded-tagging), both offering a potential approach to organize your model elements and modifiers for effective lodding.
 
@@ -245,7 +243,9 @@ These presets assume you organize your model elements and modifiers like this:
 
   * `m` is a number between `0` and `4` and
   
-  * `n` is a number between `1` and `5`.
+  * `n` is a number between `1` and `5` and
+
+  * `m < n`.
   
   * The tags may be, but are not required to be preceded by or enclosed in some kinds of symbols. For example you can add these tags like `#lod1` or `<lod2-4>`.
 
@@ -258,7 +258,7 @@ These presets assume you organize your model elements and modifiers like this:
   
   * For each lod level `p`, only objects tagged with `lodp` or `lodm-n` are made visible, where `m <= p` and `n >= p`. For example, if you want to show lod1 objects, and you have an object tagged as `#lod1` and another tagged as `<lod0-2>`, both will be visible.
 
-* You can add the [custom object property](#rules-based-on-custom-object-properties) (for example, using [T1nk-R Custom Object Property Manager](https://github.com/gusztavj/Custom-Object-Property-Manager), another member of the **T1nk-R Utilities** designed to effectively manage custom object properties) named `Hide at Lod Level` to each of your objects which you want to hide for and below a specific LOD level, and assign the first level (a number between `0` to `5`) where the object is no more required. For example, if you want to hide an object at lod 3 (and lod 4 and lod 5), assign the value `3`.
+* You can add the [custom object property](#rules-based-on-custom-object-properties) (for example, using [T1nk-R Custom Object Property Manager](https://github.com/gusztavj/Custom-Object-Property-Manager), another member of the **T1nk-R Utilities**, designed to effectively manage custom object properties) named `Hide at Lod Level` to each of your objects which you want to hide on and below a specific LOD level, and assign the first level (a number between `0` to `5`) where the object is no more required. For example, if you want to hide an object at lod 3 (and lod 4 and lod 5), assign the value `3`.
   
   * For each lod level `p`, an object featuring the `Hide at Lod Level` property will be hidden if the value of the property is `q`, where `p <= q <= 5`. Objects not having this property or having other values will not be hidden.
 
@@ -270,7 +270,7 @@ These presets assume you organize your model elements and modifiers like this:
 
   * Tags may be, but are not required to be preceded by or enclosed in some kinds of symbols. For example you can add these tags like `#lod1` or `<lod2>`.
 
-##### Example for Direct Tagging
+##### Example for Modifier Visibility with Direct Tagging
 
 |![A screenshot of Blender's Properties editor with the Modifiers tab open to show tagged modifiers](art/organizing-model--tagging-modifiers.png)|
 |:--:|
@@ -295,7 +295,9 @@ These presets assume you organize your model elements and modifiers like this:
 
   * `m` is a number between `0` and `4` and
   
-  * `n` is a number between `1` and `5`.
+  * `n` is a number between `1` and `5` and
+  
+  * `m < n`.
   
   * The tags may be, but are not required to be preceded by or enclosed in some kinds of symbols. For example you can add these tags like `#lod1` or `<lod2-4>`.
 
@@ -308,7 +310,7 @@ These presets assume you organize your model elements and modifiers like this:
   
   * For each lod level `p`, only objects tagged with `lodp` or `lodm-n` are made visible, where `m <= p` and `n >= p`. For example, if you want to show lod1 objects, and you have an object tagged as `#lod1` and another tagged as `<lod0-2>`, both will be visible.
 
-* (Same as with [Direct Tagging](#presets-for-direct-tagging)) You can add the [custom object property](#rules-based-on-custom-object-properties) (for example, using [T1nk-R Custom Object Property Manager](https://github.com/gusztavj/Custom-Object-Property-Manager), another member of the **T1nk-R Utilities** designed to effectively manage custom object properties) named `Hide at Lod Level` to each of your objects which you want to hide for and below a specific LOD level, and assign the first level (a number between `0` to `5`) where the object is no more required. For example, if you want to hide an object at lod 3 (and lod 4 and lod 5), assign the value `3`.
+* (Same as with [Direct Tagging](#presets-for-direct-tagging)) You can add the [custom object property](#rules-based-on-custom-object-properties) (for example, using [T1nk-R Custom Object Property Manager](https://github.com/gusztavj/Custom-Object-Property-Manager), another member of the **T1nk-R Utilities**, designed to effectively manage custom object properties) named `Hide at Lod Level` to each of your objects which you want to hide on and below a specific LOD level, and assign the first level (a number between `0` to `5`) where the object is no more required. For example, if you want to hide an object at lod 3 (and lod 4 and lod 5), assign the value `3`.
   
   * For each lod level `p`, an object featuring the `Hide at Lod Level` property will be hidden if the value of the property is `q`, where `p <= q <= 5`. Objects not having this property or having other values will not be hidden.
 
@@ -322,7 +324,7 @@ These presets assume you organize your model elements and modifiers like this:
 
   * Tags may be, but are not required to be preceded by or enclosed in some kinds of symbols. For example you can add these tags like `#lod1` or `<lod2>`.
 
-##### Example for Cascaded Tagging
+##### Example for Modifier Visibility with Cascaded Tagging
 
 |![A screenshot of Blender's Properties editor with the Modifiers tab open to show tagged modifiers](art/organizing-model--tagging-modifiers.png)|
 |:--:|
