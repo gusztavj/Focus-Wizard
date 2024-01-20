@@ -17,7 +17,7 @@
 # 
 # You need Blender 3.6 or newer for this addon to work.
 #
-# Help, support, updates and anything else: https://github.com/gusztavj/Modifier-Manager
+# Help, support, updates and anything else: https://github.com/gusztavj/Focus-Wizard
 #
 # COPYRIGHT ***********************************************************************************************************************
 # Creative Commons CC BY-NC-SA:
@@ -51,7 +51,7 @@
 #   * You can use this add-on to save your presets in JSON format to a file on your computer.
 #   * You can use this add-on to load presets from a JSON file on your computer.
 #
-# You may learn more about legal matters on page https://github.com/gusztavj/Modifier-Manager
+# You may learn more about legal matters on page https://github.com/gusztavj/Focus-Wizard
 #
 # *********************************************************************************************************************************
 
