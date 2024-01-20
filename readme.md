@@ -19,7 +19,7 @@ Help, support, updates and anything else: [https://github.com/gusztavj/Focus-Wiz
 
 ### Copyright
 
-This add-on has been created by T1nk-R (https://github.com/gusztavj/).
+This add-on has been created by [T1nk-R (https://github.com/gusztavj/)]((https://github.com/gusztavj/)).
 
 **Creative Commons CC BY-NC-SA:**
 
@@ -65,7 +65,7 @@ There are multiple approaches on how to create these less detailed versions. Com
 * If you apply object modifiers to decimate your objects, to switch lod levels, you may need to select each of your objects one by one and set the visibility of the effects of the modifiers in the viewport carefully.
 * If you create multiple versions with different levels of details of your objects, it may also be time-consuming to find which ones to display and which ones to hide, especially if there are some objects that would be great for multiple lod levels.
 
-This add-on can help turning this nightmare into a seamless experience by offering (and letting you create) presets defining what to display. Presets include rules 
+This add-on can help turning this nightmare into a seamless experience by offering (and letting you create) presets defining what to display. Presets include rules:
 
 * to specify which objects to show or hide
   * based on object name patterns and
@@ -233,7 +233,7 @@ This add-on is shipped with two sets of presets, called the [Direct presets](#pr
 
 #### Presets for Direct Tagging
 
-Names of _Direct Tagging presets_ start with **Direct**, and includes 6 presets from lod 0 to lod 1. The key difference between Direct Tagging and [Cascading Tagging](#presets-for-cascading-tagging) is how you tag and use modifiers.
+Names of _Direct Tagging presets_ start with **Direct**, and includes 6 presets from lod 0 to lod 5. The key difference between Direct Tagging and [Cascading Tagging](#presets-for-cascaded-tagging) is how you use modifiers.
 
 These presets assume you organize your model elements and modifiers like this:
 
@@ -281,11 +281,11 @@ In the example above:
 * **Decimate [lod1]** will only be visible when you switch to lod 1
 * **Decimate [lod2]** will only be visible when you switch to lod 2
 * The **Array** modifier will always be visible as won't match any hiding rules, since it doesn't contain `lodp` where `p` is a number between 0 and 5.
-* If you switch to lod 3, and provided that the object is not completely hidden on lod 3, both **Decimate** operators will be hidden (as they will match the `lod[01245]` modifier hiding rule of the `Direct: Lod 3` preset you selected). Using direct tagging, you need to assign decimate or other geometry simplification modifier for each lod level if you want to get a less detailed version of the object.
+* If you switch to lod 3, and provided that the object is not completely hidden on lod 3, both **Decimate** operators will be hidden (as they will match the `lod[01245]` modifier hiding rule of the **Direct: Lod 3** preset you selected). Using direct tagging, you need to assign decimate or other geometry simplification modifiers for each lod level if you want to get a less detailed version of the object.
 
 #### Presets for Cascaded Tagging  
 
-Names of _Cascaded Tagging presets_ start with **Cascaded**, and includes 6 presets from lod 0 to lod 1. The key difference between [Direct Tagging](#presets-for-direct-tagging) and Cascaded Tagging is how you tag and use modifiers.
+Names of _Cascaded Tagging presets_ start with **Cascaded**, and includes 6 presets from lod 0 to lod 5. The key difference between [Direct Tagging](#presets-for-direct-tagging) and Cascaded Tagging is how you tag and use modifiers.
 
 These presets assume you organize your model elements and modifiers like this:
 
@@ -314,11 +314,11 @@ These presets assume you organize your model elements and modifiers like this:
   
   * For each lod level `p`, an object featuring the `Hide at Lod Level` property will be hidden if the value of the property is `q`, where `p <= q <= 5`. Objects not having this property or having other values will not be hidden.
 
-* You add a tag `lodn` to the name of modifiers which belong to a specific lod level.
+* You add a tag `lodn` to the name of modifiers which belong to a specific lod level _and less detailed levels_.
   
-  * If you select level `p`, modifiers tagged with `lodq`, where `q >= p` will all be made hidden.
+  * If you select level `p`, modifiers tagged with `lodq`, where `q >= p` will all be made hidden, while modifiers tagged with `lodz`, where `z < p` will all be made visible.
 
-    * Note that, unlike with [Direct Tagging](#presets-for-direct-tagging), for any level `p`, the effects of your modifiers tagged for levels _0_ to `p` will be added together. This works well when you add, for example, Decimate modifiers for each lod level from level 1, and set each to, say, Collapse with a Ratio of 0.8. That is, on lod 1 you'll end up applying a modifier with a _0.8_ ratio, on lod 2 you'll end up applying two modifiers with combined effects of _0.8 * 0.8_ ratio and so on.
+    * Note that, unlike with [Direct Tagging](#presets-for-direct-tagging), for any level `p`, the effects of your modifiers tagged for levels _0_ to `p` will be added together. This works well when you add, for example, Decimate modifiers for each lod level from level 1, and set each to, say, **Collapse** with a **Ratio** of 0.8. That is, on lod 1 you'll end up applying a modifier with a _0.8_ ratio, on lod 2 you'll end up applying two modifiers with combined effects of _0.8 * 0.8_ ratio and so on.
   
   * Modifiers without a lod tag will always be shown.
 
@@ -334,16 +334,14 @@ In the example above:
 
 * **Decimate [lod1]** will be visible when you switch to lod `p` where `p >= 1`.
 * **Decimate [lod2]** will be visible when you switch to lod `p` where `p >= 2`.
-* The **Array** modifier will always be visible as won't match any hiding rules, since it doesn't contain `lodp` where `p` is a number between 0 and 5.
-* If you switch to lod 3, and provided that the object is not completely hidden on lod 3, both **Decimate** operators will apply (the key difference with the direct approact), as they will not match the `lod[45]` modifier hiding rule of the `Cascaded: Lod 3` preset you selected. Using cascaded tagging, you don't need to assign decimate or other geometry simplification modifier for each lod level if you don't want to further reduce geometry.
+* The **Array** modifier will always be visible as it won't match any hiding rules, since it doesn't contain `lodp` where `p` is a number between 0 and 5.
+* If you switch to lod 3, and provided that the object is not completely hidden on lod 3, both **Decimate** operators will apply (the key difference with the direct approact), as they will _not_ match the `lod[45]` modifier hiding rule of the **Cascaded: Lod 3** preset you selected. Using cascaded tagging, you _don't_ need to assign decimate or other geometry simplification modifiers for each lod level if you don't want to further reduce geometry.
 
 #### Choosing Between Built-In Presets
 
-It's up to how you feel more comfortable and how you can reduce your model's geometry.
+It's up to how you feel more comfortable and how you can reduce your model's geometry.The key difference is how modifiers are shown/hidden and whether their effects are combined or not.
 
-The key difference is how modifiers are shown/hidden and whether their effects are combined or not.
-
-Say you have two **Decimate** operators, `Decimate #lod1` and `Decimate #lod2`. 
+Say you have two **Decimate** operators, `Decimate #lod1` and `Decimate #lod2`:
 
 * If you switch to lod 0 or lod 1, both presets work the same way.
 * If you switch to lod 2, the two works differently:
@@ -352,9 +350,9 @@ Say you have two **Decimate** operators, `Decimate #lod1` and `Decimate #lod2`.
 
 If you can reduce geometry for all of your objects using only **Decimate** operators, then cascading may be more intuitive to use: if you add a **Decimate** modifier for each lod level from level 1, and set each to, say, **Collapse** with a **Ratio** of 0.8, ony lod level 2 you'll combine the effects of the two to have a collapse with a _0.8 * 0.8_ ratio and so on. With the cascading approach, if you want to apply the same modifier for lod level 4 that you used for lod level 3, you don't need to duplicate your lod 3 modifier.
 
-If you, however, can't combine the effects of your Decimate or other modifiers, the direct approach is better, even though you may need to create exact copies of some modifiers to assign them to all levels.
+If you, however, can't combine the effects of your **Decimate** or other modifiers, the direct approach is better, even though you may need to create exact copies of some modifiers to make sure there is one assigned explicitly to each level.
 
-However, the great news is how customizable this add-on is! You can edit the built-in presets or create your owns to tailor everything to your needs. You can, for example, to create a modifier hiding preset with some complex regex which works as cascaded with Decimate operators and as direct with others. It's all up to you!
+However, the great news is how customizable this add-on is! You can edit the built-in presets or create your own presets to tailor everything to your needs. You can, for example, create a modifier hiding rule with some complex regex which works as cascaded with **Decimate** operators and as direct with others. It's all up to you!
 
 ### Notes on Composing and Editing Presets
 
@@ -376,7 +374,7 @@ You can simply [create custom presets](#bottom-button-bar).
 
 ### T1NK-R Focus Wizard Panel
 
-The main panel of the add-on can be displayed by displaying the **Sidebar** in object mode. 
+The main panel of the add-on can be displayed by displaying the **Sidebar** in object mode.
 
 |![Screenshot of the main panel of the add-on](art/focus-wizard--main-panel.png)|
 |:--:|
@@ -392,7 +390,7 @@ The main panel of the Focus Wizard is divided into the following sections:
 
 In the **Select scope** section you have the following options:
 
-* **Only process selected objects.** Restrict the scope to selected objects only. Objects not selected at the moment of clicking Select Preset or Refresh won't be processed and touched by the add-on. This may be used for testing purposes. For example you can check how your LOD2 model looks like with a LOD3 object to see if you can simplify your object further for LOD2.
+* **Only process selected objects.** Restrict the scope to selected objects only. Objects not selected at the moment of clicking **Select Preset** or **Refresh** won't be processed and touched by the add-on. This may be used for testing purposes. For example you can check how your LOD2 model looks like with a LOD3 object to see if you can simplify your object further for LOD2.
 * **Root collection.** The base scope of your operation which you can restrict further with the checkbox. When doing its work, the add-on will only process and consider objects in and below this collection. If you have, for example, helper and template objects, you can move them out of the collection containing your "real" objects, and the add-on won't touch them ever.
 
   > Note that for the sake of safety you **need** to choose a collection or the operations will fail. You can choose the topmost collection just as any other, but you have to do this explicitly to avoid accidental changes to visibility.
@@ -401,9 +399,10 @@ In the **Select scope** section you have the following options:
 
 The following settings are offered:
 
-* **Select preset**. Select and apply a preset. To reapply a preset, open the drop-down and select it again.
+* **Select preset**. Select and apply a preset. To reapply a preset, open the drop-down and select it again, or click **Refresh**.
 * **Add/Edit Presets**. Open the [Preset Editor](#preset-editor) where you can edit, add, delete, revert, reload, import and export presets.
-* **Selected Preset**. This section displays the rules of the selected preset so that you don't need to open Preset Editor to get a quick view of what is expected to be visible and hidden.
+* **Refresh**. Reapply the current selection. You can use this if you manually changed visibility and want to revert to the selected LOD.
+* **Selected Preset**. This section displays the rules of the selected preset so that you don't need to open **Preset Editor** to get a quick view of what is expected to be visible and hidden.
 
 #### Operation Settings
 
@@ -427,7 +426,7 @@ Notes:
 * You cannot change the name of built-in presets.
 * Make sure preset names are unique as they serve as the keys of presets, too. If you have two presets by the same name, it is undefined which one will be in effect.
 * You don't need to save changes. Anything you do is saved automatically.
-* Undo is also available fpr editing presets. If you think you made a mistake, just hit some **Undo** in Blender's **Edit** menu.
+* Undo is also available for editing presets. If you think you made a mistake, just hit some **Undo** in Blender's **Edit** menu.
 
 **Columns:**
 
@@ -440,9 +439,9 @@ Notes:
 
 This bar includes a few buttons as follows:
 
-* **Add.**. Create a new custom preset. You can create as many as you want. Make sure to set a unique name, though.
+* **Add.** Create a new custom preset. You can create as many as you want. Make sure to set a unique name, though.
 
-* **Export.** Export all presets, including built-in ones, to a JSON file in your computer. Once clicking the button, a small dialog opens where you can browse where to save the file. 
+* **Export.** Export all presets, including built-in ones, to a JSON file on your computer. Once clicking the button, a small dialog opens where you can browse where to save the file.
   
   Please note that after you select a file, the window may accidentally be closed. In this case just hit **Export** again, and the file will be there, and you will only need to click **Save**.
 
@@ -459,62 +458,3 @@ This bar includes a few buttons as follows:
 
 * **Reset All.** Click to delete all custom presets and revert all built-in presets to factory state.
   * Before clicking the button, check **Confirm deleting custom/resetting built-in presets** to confirm your intent. This is to prevent accidental clicks.
-
-## More Complex Examples
-
-### Cascading Approach for Custom Object Properties
-
-If you have smaller objects, for example, those may not be required at a certain lod level. For example, if you plan to have four lod levels from lod0 to lod3 and you find that a small object would anyway be invisible on lod2 and lod3, you can further reduce the number of polygons by not including it in the lod2 and lod3 asset version. To manage this situation with this add-on, say, for example, you create a custom object property called `Hide at LOD Level` and for each object specify a value if you want to hide it on or below certain lod levels. Now you can specify `2` or `23` as the value for `Hide at LOD Level`, and create appropriate rules:
-
-If you follow an _incremental or cascading approach_, you can specify `2` for `Hide at LOD Level` and interpret it that the object shall not be included in the model _on and below_ lod2. Then you need to:
-
-* Create a custom preset called `My Lod 0` with the following values:
-  * **Custom Property Name** = `Hide at LOD Level`
-  * **Show Objects by Property Value** = empty to show all objects regardless of the value of this property
-  * * **Hide Objects by Property Value** = `` (leave empty)
-
-  This tells to not hide any objects at lod level 0.
-
-* Create a custom preset called `My Lod 1` with the following values:
-  * **Custom Property Name** = `Hide at LOD Level`
-  * **Show Objects by Property Value** = empty to show all objects regardless of the value of this property
-  * * **Hide Objects by Property Value** = `1` (leave empty)
-
-  This tells to not hide objects with a value of `1` in this property.  
-
-* Create a custom preset called `My Lod 2` with the following values:
-  * **Custom Property Name** = `Hide at LOD Level`
-  * **Show Objects by Property Value** = empty to show all objects regardless of the value of this property
-  * * **Hide Objects by Property Value** = `[12]`
-
-  This will hide all objects where the value of the custom object property is `1` or `2`. The term _cascading_ describes that if something is set to be hidden at lod _n_, it stays hidden at lod _n+m_. Hence you have to include `1` in addition to `2`.
-
-* Create a custom preset called `My Lod 3` with the following values:
-  * **Custom Property Name** = `Hide at LOD Level`
-  * **Show Objects by Property Value** = empty to show all objects regardless of the value of this property
-  * * **Hide Objects by Property Value** = `[123]`
-
-    This will hide all objects where the value of the custom object property is `1`, `2` or `3`.
-
-Feel free to use this approach for other rule groups, too, if it fits your logic of managing your model and lod levels.
-
-### Direct Approach for Modifiers
-
-Modifiers can typically be managed effectively along both the cascading and the direct approach. 
-
-* With a cascading approach, if you create modifiers called `Decimate <lod1>` and `Decimate <lod2>`, you plan both to be invisible for lod 0, only the first visible for lod 1, and both visible for lod 2. This way the effects accumulate.
-* With a direct approach, the two modifiers are independent of each other: for lod 0 you don't need any, for lod 1 you only need `Decimate <lod1>` and for lod 2 you only need `Decimate <lod2>`.
-
-This example shows how the second works. Let's say you have a complex object that you can and want to decimate for each lod level. Now:
-
-* Create a custom preset called `My Lod 0` with the following values:
-  * **Modifiers to Show** = `` (empty) to turn on all by default.
-  * **Modifiers to Hide** = `<lod[123]` to hide all modifiers belonging to less detailed lod levels.
-
-  This will show all modifiers except those having `<lod1`, `<lod2` or `<lod3` in their names.
-
-* Create a custom preset called `My Lod 3` with the following values:
-  * **Modifiers to Show** = `` (empty) to turn on all by default.
-  * **Modifiers to Hide** = `<lod[023]` to hide all modifiers belonging to other lod levels.
-
-  This will only hide modifiers with `<lod0`, `<lod1` or `<lod3` in their names. Modifiers not belonging to specific lod levels will be in effect. Note that you excluded the name pattern `<lod0`, meaning that you can create modifiers to be in effect only on lod 0. This is typically a Bevel modifier for sharp edges for which you want to pay the price for close-up views, but not in less detailed levels.
