@@ -13,9 +13,9 @@ With this add-on you can set up rules to easily view your model as it looks like
 
 This quick demo shows how easy it can be to switch between views for various lod levels of your models no matter how complex they are.
 
-<video src="art/demo.mp4" controls title="Quick demo of the add-on showing how easy is to switch between views of various lod levels"></video>
+https://github.com/gusztavj/Focus-Wizard/blob/main/art/demo.mp4
 
-You need Blender 3.6 or newer for this add-on to work.
+You need Blender 3.6 or newer for this add-on to work:
 
 Help, support, updates and anything else: [https://github.com/gusztavj/Focus-Wizard](https://github.com/gusztavj/Focus-Wizard)
 
