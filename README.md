@@ -1,4 +1,4 @@
-# T1nk-R Focus Wizard add on for Blender
+# T1nk-R Focus Wizard add-on for Blender
 
 Part of **T1nk-R Utilities for Blender**
 
@@ -23,7 +23,7 @@ Help, support, updates and anything else: [https://github.com/gusztavj/Focus-Wiz
 
 ### Copyright
 
-This add-on has been created by [T1nk-R (https://github.com/gusztavj/)]((https://github.com/gusztavj/)).
+This add-on has been created by [T1nk-R (https://github.com/gusztavj/)](https://github.com/gusztavj/).
 
 **Creative Commons CC BY-NC-SA:**
 
