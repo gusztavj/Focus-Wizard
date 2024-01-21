@@ -58,7 +58,7 @@
 # Blender-specific properties #####################################################################################################
 
 bl_info = {
-    "name": "T1nk-R Focus Wizard",
+    "name": "T1nk-R Focus Wizard (T1nk-R Utilities)",
     "author": "T1nk-R (GusJ)",
     "version": (2, 0, 1),
     "blender": (3, 6, 0),
@@ -139,7 +139,7 @@ def register():
     kc = wm.keyconfigs.addon
     if kc:
         # km = wm.keyconfigs.addon.keymaps.new(name='Material Manager', space_type='EMPTY')
-        # kmi = km.keymap_items.new(FocusWizard.T1NKER_OT_RenameCollection.bl_idname, 'M', 'PRESS', ctrl=True, shift=True)
+        # kmi = km.keymap_items.new(FocusWizard.T1NKER_OT_MaterialManager.bl_idname, 'M', 'PRESS', ctrl=True, shift=True)
         # addon_keymaps.append((km, kmi))
         pass
 
