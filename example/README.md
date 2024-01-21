@@ -48,7 +48,7 @@ The idea here is that we create a separate **Subdivision** modifier for lod 0, 1
 
 Before you learn how to set up your stuff to work like charm, first take a look at this short demo to find out what ease of switching you can gain.
 
-<video src="../art/demo.mp4" controls title="Quick demo of the add-on showing how easy is to switch between views of various lod levels"></video>
+https://github.com/gusztavj/Focus-Wizard/assets/12009110/52c55d88-da66-429c-b061-b6850398fc3d
 
 #### How Modifier Rules for Direct Presets Work
 
