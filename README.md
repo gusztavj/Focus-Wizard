@@ -11,6 +11,10 @@ You can use this add-on to create presets in the form of a set of rules:
 
 With this add-on you can set up rules to easily view your model as it looks like at various LOD levels by showing respective objects and modifier effects and hiding others.
 
+This quick demo shows how easy it can be to switch between views for various lod levels of your models no matter how complex they are.
+
+<video src="art/demo.mp4" controls title="Quick demo of the add-on showing how easy is to switch between views of various lod levels"></video>
+
 You need Blender 3.6 or newer for this add-on to work.
 
 Help, support, updates and anything else: [https://github.com/gusztavj/Focus-Wizard](https://github.com/gusztavj/Focus-Wizard)
@@ -89,6 +93,10 @@ You tag your objects the same way. You can then specify a preset for LOD 2 to sh
 |![A picture of modifiers tagged to indicate for which LOD you want to use them](art/organizing-model--tagging-objects-1.png)|
 |:--:|
 |_Objects tagged to indicate for which LOD you want to use them_|
+
+##### Quick Example 3 (Tutorial)
+
+This add-on is shipped with an example Blender model file that you can find in the `example` folder of the ZIP file of the installation package, or under the installation folder of the add-on. The example is accompanied by a [Tutorial](example/README.md).
 
 ### Using T1NK-R Focus Wizard
 
