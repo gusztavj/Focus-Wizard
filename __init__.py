@@ -60,7 +60,7 @@
 bl_info = {
     "name": "T1nk-R Focus Wizard",
     "author": "T1nk-R (GusJ)",
-    "version": (1, 0, 3),
+    "version": (2, 0, 0),
     "blender": (3, 6, 0),
     "location": "View3D > Sidebar (N) > T1nk-R Utils",
     "description": "Control visibility of objects and modifiers to see how your model looks at a specific LOD level",
