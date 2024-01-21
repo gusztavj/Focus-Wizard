@@ -13,7 +13,7 @@ With this add-on you can set up rules to easily view your model as it looks like
 
 This quick demo shows how easy it can be to switch between views for various lod levels of your models no matter how complex they are.
 
-https://imprestige.biz/etc/T1nk-R-Focus-Wizard-for-Blender-Demo.mp4
+https://github.com/gusztavj/Focus-Wizard/assets/12009110/52c55d88-da66-429c-b061-b6850398fc3d
 
 You need Blender 3.6 or newer for this add-on to work:
 
