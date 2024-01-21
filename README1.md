@@ -11,7 +11,7 @@ You can use this add-on to create presets in the form of a set of rules:
 
 With this add-on you can set up rules to easily view your model as it looks like at various LOD levels by showing respective objects and modifier effects and hiding others.
 
-You need Blender 3.6 or newer for this addon to work.
+You need Blender 3.6 or newer for this add-on to work.
 
 Help, support, updates and anything else: [https://github.com/gusztavj/Focus-Wizard](https://github.com/gusztavj/Focus-Wizard)
 
